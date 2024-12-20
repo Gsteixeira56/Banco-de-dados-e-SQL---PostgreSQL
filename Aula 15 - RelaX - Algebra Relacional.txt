@@ -1,0 +1,46 @@
+-- Projeção = projeta todos os dados da tabela
+-- π hcode,name,city,country (hotel)
+-- π tcode,name,country,age,gender (tourist)
+-- π acode,aname,duration_in_minutes (activity)
+-- π hcode,tcode,year,days,cost (stay)
+-- π tcode,acode,year,cost (participate)
+
+-- Operador de seleção = seria filtrar dentro da tabela do dado, = where
+-- σ hcode = 'h1' (hotel)
+-- σ year > 2001 (participate)
+-- σ year > 2001 ∧ year ≤ 2004 (participate)
+
+-- Operador projeção e seleção juntos:
+-- π tcode,acode σ year > 2001 ∧ year ≤ 2004 (participate)
+-- π year,days σ days > 3 (stay)
+
+-- Project + select, união e intersecção:
+-- π tcode (participate)
+-- π tcode (stay)
+
+-- União: 
+-- π tcode (participate) ∪ π tcode (stay)
+
+-- Intersecção:
+-- π tcode (participate) ∩ π tcode (stay)
+
+-- Join: (o ρ renomeia os Joins, ← renomeia coluna e ⟕ faz o left outer join)
+-- π Turista←trt.name, NomedaAtividade←act.aname, Ano←year, Custo←cost (ρ ptr participate ⟕ ptr.tcode = trt.tcode ρ trt tourist ⟕ ptr.acode = act.acode ρ act activity)
+
+-- Agrupamento:
+-- γ tcode; sum(cost)->soma (participate) 
+-- γ tourist.name; sum(cost)->soma (participate ⟕ participate.tcode = tourist.tcode tourist)
+
+-- Exercícios álgebra relacional
+
+-- 1. O nome e o país dos turistas com mais de 20 anos e do gênero feminino (project + select)
+
+-- π name,country σ age > 20 ∧ gender = 'female' (tourist)
+
+-- 2. O nome do hotel, o nome do cliente, o ano, os dias de hospedagem e custo da hospedagem (join na tabela stay)
+
+-- π Hotel←htl.name,Turista←trt.name,Ano←year,DiasdeHospedagem←days,CustodaHospedagem←cost (ρ sty stay ⟕ sty.hcode = htl.hcode ρ htl hotel ⟕ sty.tcode = trt.tcode ρ trt tourist)
+
+-- 3. O somatório do custo da hospedagem agrupado pelo nome do hotel (agrupamento e join na tabela stay)
+
+-- γ hotel.name; sum(stay.cost)->Soma (hotel ⟕ hotel.hcode = stay.hcode stay)
